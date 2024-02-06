@@ -41,6 +41,7 @@
         el.autoplay = true
         el.controls = true
         document.getElementById('remoteVideos').appendChild(el)
+        console.log("Temp")
 
         event.track.onmute = function(event) {
           el.play()
