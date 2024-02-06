@@ -242,7 +242,23 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 	peerConnection, err := webrtc.NewPeerConnection(webrtc.Configuration{
 		ICEServers: []webrtc.ICEServer{
 			{
-				URLs: []string{"stun:stun.l.google.com:19302"},
+				URLs:       []string{"turn:turn.anyfirewall.com:443?transport=tcp"},
+				Username:   "webrtc",
+				Credential: "webrtc",
+			},
+			{
+				URLs:       []string{"turn:192.158.29.39:3478?transport=tcp"},
+				Username:   "28224511:1379330808",
+				Credential: "JZEOEt2V3Qb0y27GRntt2u2PAYA=",
+			},
+			{
+				URLs: []string{
+					"stun:stun.l.google.com:19302",
+					"stun:stun1.l.google.com:19302",
+					"stun:stun2.l.google.com:19302",
+					"stun:stun3.l.google.com:19302",
+					"stun:stun4.l.google.com:19302",
+				},
 			},
 		},
 	})
@@ -337,6 +353,7 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 		switch message.Event {
 		case "candidate":
 			candidate := webrtc.ICECandidateInit{}
+			log.Printf("Server received ICE Candidate: %v\n", message.Data)
 			if err := json.Unmarshal([]byte(message.Data), &candidate); err != nil {
 				log.Println(err)
 				return
